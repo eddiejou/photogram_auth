@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   # CREATE
   get "/likes/new", :controller => "likes", :action => "new"
   post "/create_like", :controller => "likes", :action => "create"
+#  get "/my_likes", :controller => "likes", :action => "my_likes"
 
   # READ
   get "/likes", :controller => "likes", :action => "index"
@@ -64,8 +65,9 @@ Rails.application.routes.draw do
   # CREATE
   get "/users/new", :controller => "users", :action => "new"
   post "/create_user", :controller => "users", :action => "create"
+  get "/my_likes", :controller => "users", :action => "my_likes"
 
-  # READ
+  # READ  
   get "/users", :controller => "users", :action => "index"
   get "/users/:id", :controller => "users", :action => "show"
 

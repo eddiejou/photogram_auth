@@ -1,0 +1,27 @@
+<% where(@like.photo).each do |photo| %>
+<div class="container">
+  <div class="col-md-6">
+    <div class="thumbnail">
+
+      <img src="<%= @like.photo_id.image %>">
+
+
+      <div class="caption">
+        <a href="http://localhost:3000/photos/<%= @like.photo_id %>" class="btn btn-default btn-block">
+          Detail
+        </a>
+
+        <a href="http://localhost:3000/photos/<%= @like.photo_id %>/edit" class="btn btn-default btn-block">
+          Edit
+        </a>
+
+        <a href="http://localhost:3000/delete_photo/<%= @like.photo_id %>" class="btn btn-default btn-block">
+          <!--<%= link_to "Delete", "http://localhost:3000/delete_photo/#{photo.id}", :data => { :confirm => "Are you sure you want to kill this photo?" } %>-->
+          Delete
+        </a>
+
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
