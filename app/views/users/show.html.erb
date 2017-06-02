@@ -1,3 +1,4 @@
+
 <div class="container">
   <div class="col-md-6">
 
@@ -17,25 +18,81 @@
 <% if current_user != nil %>
 <% @user.photos.each do |photo| %>
 <div class="container">
-  <div class="col-md-6">
-    <div class="thumbnail">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= photo.user.username %> <%= time_ago_in_words(Time.now) %></h3>
+        <h3> <%= photo.caption %> </h3>
+      </div>
+      <div class="panel-body">
 
-      <img src="<%= photo.image %>">
+        <img src="<%= photo.image %>" class="img-responsive">
 
 
-      <div class="caption">
-        <a href="http://localhost:3000/photos/<%= photo.id %>" class="btn btn-default btn-block">
-          Detail
+        <% if current_user.liked_photos.ids.include? photo.id %>
+        <a href="/delete_like/<%= photo.likes.find_by(:user_id => current_user.id).id %>" class="btn btn-link">
+          <i class="fa fa-heart" aria-hidden="true"></i>
         </a>
+        <small class="text-muted"><%= photo.user.username %> liked this</small>
+        <% else %>
+        <form action="/create_like" method="post">
+          <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+          <input type="hidden" id="photo_id" name="photo_id" value="<%= photo.id %>">
+          <input type="hidden" id="user_id" name="user_id" value="<%= photo.user.id %>">
+          <% if photo.fans.count==0 %>
+          <button class="btn btn-link" ><i class="fa fa-heart-o"></i></button>
+          <small class="text-muted">be the first to like this</small>
+          <% else %>
+          <button class="btn btn-link" type="submit"><i class="fa fa-heart" aria-hidden="true"></i></button>
+          <small class="text-muted"><%= photo.user.username %> liked this</small>
+          <% end %>
+        </form>
+        <% end %>
 
-        <a href="http://localhost:3000/photos/<%= photo.id %>/edit" class="btn btn-default btn-block">
-          Edit
-        </a>
+        <%= photo.comments.each do |comment| %>
+        <ul class="media-list">
+          <li class="media">
+            <div class="media-body">
+              <h6 class="media-heading"><%= comment.user.username %></h6>
+              <%= comment.body %>
+            </div>
+          </li>
+        </ul>
+        <% end %>
 
-        <a href="http://localhost:3000/delete_photo/<%= photo.id %>" class="btn btn-default btn-block">
-          <!--<%= link_to "Delete", "http://localhost:3000/delete_photo/#{photo.id}", :data => { :confirm => "Are you sure you want to kill this photo?" } %>-->
-          Delete
-        </a>
+        <div class="media-body">
+          <li class="media">
+            <div class="media-body">
+              <form action="/create_comment" method="post">
+                <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+                <input type="hidden" name="photo_id" value="<%= photo.id %>">
+                <input type="hidden" name="user_id" value="<%= photo.user.id %>">
+                <div class="form-group">
+                  <label for="body" class="sr-only">Body</label>
+                  <div class="input-group">
+                    <input type="text" id="body" name="body" class="form-control" placeholder="Add a comment..." required>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit">
+                        <i class="fa fa-commenting-o">
+                        </i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </li>
+        </div>
+
+
+
+        <div class="btn-group btn-group-justified">
+          <a href="/photos/<%= photo.id %>" class="btn btn-primary">Show</a>
+          <% if photo.user_id==current_user.id %>
+          <a href="/photos/<%= photo.id %>/edit" class="btn btn-warning">Edit</a>
+          <a href="/delete_photo/<%= photo.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+          <% end %>
+        </div>
 
       </div>
     </div>
