@@ -29,7 +29,7 @@
         <% end %>
 
         <ul class="media-list">
-          <%= photo.comments.each do |comment| %>
+          <% photo.comments.each do |comment| %>
           <li class="media">
             <div class="media-body">
               <h6 class="media-heading"><%= comment.user.username %></h6>
