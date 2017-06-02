@@ -32,9 +32,13 @@
           <button class="btn btn-link" ><i class="fa fa-heart-o"></i></button>
         </form>
         <% end %>
-<!-- who likes the photo should come in separate if -->
-<small class="text-muted"><%= current_user.username %> liked this</small>
-<small class="text-muted">be the first to like this</small>
+
+        <!-- who likes the photo should come in separate if -->
+        <% if photo.fans.count==0 %>
+        <small class="text-muted">be the first to like this</small>
+        <% else %>
+        <small class="text-muted"><%= photo.fans.map{|f| f.username}.join(", ") %> liked this </small>
+        <% end %>
 
         <ul class="media-list">
           <% photo.comments.each do |comment| %>

@@ -33,21 +33,23 @@
         <a href="/delete_like/<%= photo.likes.find_by(:user_id => current_user.id).id %>" class="btn btn-link">
           <i class="fa fa-heart" aria-hidden="true"></i>
         </a>
-        <small class="text-muted"><%= photo.user.username %> liked this</small>
         <% else %>
         <form action="/create_like" method="post">
           <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
           <input type="hidden" id="photo_id" name="photo_id" value="<%= photo.id %>">
-          <input type="hidden" id="user_id" name="user_id" value="<%= photo.user.id %>">
-          <% if photo.fans.count==0 %>
+          <input type="hidden" id="user_id" name="user_id" value="<%= current_user.id %>">
           <button class="btn btn-link" ><i class="fa fa-heart-o"></i></button>
-          <small class="text-muted">be the first to like this</small>
-          <% else %>
-          <button class="btn btn-link" type="submit"><i class="fa fa-heart" aria-hidden="true"></i></button>
-          <small class="text-muted"><%= photo.user.username %> liked this</small>
-          <% end %>
         </form>
         <% end %>
+
+        <!-- who likes the photo should come in separate if -->
+        <% if photo.fans.count==0 %>
+        <small class="text-muted">be the first to like this</small>
+        <% else %>
+        <small class="text-muted"><%= photo.fans.map{|f| f.username}.join(", ") %> liked this </small>
+        <% end %>
+
+
 
         <% photo.comments.each do |comment| %>
         <ul class="media-list">
